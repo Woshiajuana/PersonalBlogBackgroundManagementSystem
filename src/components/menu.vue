@@ -4,13 +4,13 @@
             <el-submenu index="1">
                 <template slot="title"><i class="el-icon-document"></i>全部文章</template>
                 <el-menu-item-group>
-                    <el-menu-item index="1-1">ALL FILES</el-menu-item>
-                    <el-menu-item index="1-2">HTML</el-menu-item>
-                    <el-menu-item index="1-3">CSS</el-menu-item>
-                    <el-menu-item index="1-4">JAVASCRIPT</el-menu-item>
-                    <el-menu-item index="1-5">VUE</el-menu-item>
-                    <el-menu-item index="1-6">ANGULAR</el-menu-item>
-                    <el-menu-item index="1-7">NODE</el-menu-item>
+                    <el-menu-item index="1-1"><a href="#/?tab=all">ALL FILES</a></el-menu-item>
+                    <el-menu-item index="1-2"><a href="#/?tab=html">HTML</a></el-menu-item>
+                    <el-menu-item index="1-3"><a href="#/?tab=css">CSS</a></el-menu-item>
+                    <el-menu-item index="1-4"><a href="#/?tab=js">JAVASCRIPT</a></el-menu-item>
+                    <el-menu-item index="1-5"><a href="#/?tab=vue">VUE</a></el-menu-item>
+                    <el-menu-item index="1-6"><a href="#/?tab=angular">ANGULAR</a></el-menu-item>
+                    <el-menu-item index="1-7"><a href="#/?tab=node">NODE</a></el-menu-item>
                 </el-menu-item-group>
             </el-submenu>
             <el-menu-item index="2"><i class="el-icon-plus"></i>发表文章</el-menu-item>
@@ -40,5 +40,18 @@
         width: 200px;
         bottom: 0;
         background-color: #EFF2F7;
+    }
+    .el-menu-item{
+        @extend %pr;
+        a{
+            @extend %pa;
+            @extend %db;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 0 45px;
+            color: inherit;
+        }
     }
 </style>
