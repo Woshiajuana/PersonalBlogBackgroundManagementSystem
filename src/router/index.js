@@ -37,10 +37,13 @@ let router = new Router({
  * */
 router.beforeEach( (to, from, next) => {
     var user = Util.dataToSessionStorageOperate.achieve('user');
+
     if(!user && to.path != '/login')
         next('/login');
     else if ( user && to.path == '/login'){
-        next('/');
+        next('/?tab=all');
+    }else if ( user && to.path == '/' && !to.query.tab) {
+        next('/?tab=all');
     }else {
         next();
     }

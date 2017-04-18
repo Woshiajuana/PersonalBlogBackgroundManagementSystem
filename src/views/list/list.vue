@@ -55,6 +55,7 @@
 </template>
 <script>
     import Util from '../../assets/lib/util';
+    import types from '../../store/mutation-types';
     export default {
         name: 'list',
         data() {
@@ -71,26 +72,55 @@
             '$route': 'fetchData'
         },
         methods: {
-            handleSelectionChange(val) {
+            handleSelectionChange (val) {
                 this.multipleSelection = val;
             },
-            handleClick(val){
+            handleClick (val){
                 console.log(val)
             },
-            handleSizeChange(val) {
+            handleSizeChange (val) {
                 console.log(`每页 ${val} 条`);
             },
-            handleCurrentChange(val) {
+            handleCurrentChange (val) {
                 this.currentPage1 = val;
                 console.log(`当前页: ${val}`);
             },
             /**获取文章列表数据*/
-            fetchData(route) {
+            fetchData (route) {
                 var tab = route ? route.query.tab : this.$route.query.tab;
                 Util.listAjax.achieveArticle({tab:tab},(result) => {
                     if(result.status == 1)
                         this.article_arr = result.result;
                 });
+                this.$store.commit(types.SET_TAB_INDEX,this.judgeTab(tab));
+            },
+            /**判断列表tab键active的值index*/
+            judgeTab (tab) {
+                var tab_index = '';
+                switch (tab){
+                    case 'all':
+                        tab_index = '1-1';
+                        break;
+                    case 'html':
+                        tab_index = '1-2';
+                        break;
+                    case 'css':
+                        tab_index = '1-3';
+                        break;
+                    case 'js':
+                        tab_index = '1-4';
+                        break;
+                    case 'vue':
+                        tab_index = '1-5';
+                        break;
+                    case 'angular':
+                        tab_index = '1-6';
+                        break;
+                    case 'node':
+                        tab_index = '1-7';
+                        break;
+                }
+                return tab_index;
             }
         }
     }

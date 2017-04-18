@@ -55,7 +55,7 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         Util.dataToSessionStorageOperate.save('user',this.loginForm);
-                        this.$router.push("/");
+                        this.$router.push("/?tab=all");
                         return true;
                     } else {
                         return false;

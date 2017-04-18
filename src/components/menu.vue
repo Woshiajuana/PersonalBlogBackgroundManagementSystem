@@ -1,6 +1,6 @@
 <template>
     <div class="menu-wrap">
-        <el-menu default-active="1-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
+        <el-menu :default-active="tabIndex" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
             <el-submenu index="1">
                 <template slot="title"><i class="el-icon-document"></i>全部文章</template>
                 <el-menu-item-group>
@@ -21,6 +21,11 @@
 <script>
     export default {
         name: 'menu',
+        computed: {
+            tabIndex(){
+                return this.$store.state.tab_index;
+            }
+        },
         methods: {
             handleOpen(key, keyPath) {
                 console.log(key, keyPath);
