@@ -8,8 +8,7 @@
                 {{ user_name }}<i class="el-icon-caret-bottom el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>修改密码</el-dropdown-item>
-                  <el-dropdown-item>安全退出</el-dropdown-item>
+                  <el-dropdown-item><a @click="safeExit">安全退出</a></el-dropdown-item>
               </el-dropdown-menu>
           </el-dropdown>
       </div>
@@ -31,6 +30,17 @@
         methods: {
             achieveUser () {
                 this.user_name = Util.dataToSessionStorageOperate.achieve('user').user_name;
+            },
+            safeExit () {
+                console.log(1)
+                this.$confirm('是否删除安全退出?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    Util.dataToSessionStorageOperate.clear();
+                    this.$router.push("/login");
+                });
             }
         }
     }

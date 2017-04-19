@@ -8,7 +8,7 @@ const util = function ( win ) {
      * 定义一系列变量
      * */
     var util = {},
-        base_url = '//www.owulia.com/ajuan_back';
+        base_url = '//www.owulia.com/ajuan_backstage';
 
     /**
      * 根据是线上环境还是本地环境，选取不同的server_url的值
@@ -35,6 +35,10 @@ const util = function ( win ) {
         remove ( data_name ) {
             if( data_name )
                 sessionStorage.removeItem( data_name );
+        },
+        /**清空*/
+        clear () {
+            sessionStorage.clear();
         }
     };
 
@@ -42,7 +46,7 @@ const util = function ( win ) {
     util.listAjax = {
         /**请求文章数据*/
         achieveArticle (data,success_callback, fail_callback) {
-            util.ajax('../../static/list/files_'+ data.tab +'.json',{},'get',success_callback, fail_callback);
+            util.ajax('/static/list/files_'+ data.tab +'.json',{},'get',success_callback, fail_callback);
         }
     };
 
