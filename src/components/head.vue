@@ -50,9 +50,10 @@
         margin-left: 20px;
     }
     .user-info{
-        @extend %fr;
+        @extend %pa;
         @extend %cp;
-        margin: 10px 20px 0 0;
+        top: 10px;
+        right: 20px;
     }
     .user-img{
         @extend %vam;
