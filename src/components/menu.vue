@@ -13,8 +13,7 @@
                     <el-menu-item index="1-7"><a href="#/?tab=node">NODE</a></el-menu-item>
                 </el-menu-item-group>
             </el-submenu>
-            <el-menu-item index="2"><i class="el-icon-plus"></i>发表文章</el-menu-item>
-            <el-menu-item index="3"><i class="el-icon-setting"></i>导航三</el-menu-item>
+            <el-menu-item index="2"><i class="el-icon-plus"></i><a href="#/editor">发表文章</a></el-menu-item>
         </el-menu>
     </div>
 </template>

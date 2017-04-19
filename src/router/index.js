@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import Index from '../views/index/index.vue';
 import Login from '../views/login/login.vue';
 import List from '../views/list/list.vue';
+import Editor from '../views/editor/editor.vue';
 import Util from '../assets/lib/util';
 
 Vue.use(Router);
@@ -19,6 +20,12 @@ let router = new Router({
                     path: '',
                     name: 'list',
                     component: List
+                },
+                /**编辑页*/
+                {
+                    path: 'editor',
+                    name: 'editor',
+                    component: Editor
                 }
             ]
         },
@@ -28,6 +35,7 @@ let router = new Router({
             name: 'login',
             component: Login
         }
+
     ]
 });
 
