@@ -203,8 +203,11 @@
     .page-wrap{
         @extend %pa;
         @extend %tac;
+        background-color: #fff;
+        z-index: 1;
         left: 0;
         right: 0;
-        bottom: 20px;
+        padding: 10px 0 20px;
+        bottom: 0;
     }
 </style>
