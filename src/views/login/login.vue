@@ -50,8 +50,15 @@
                 }
             };
         },
+        created () {
+            console.log(111)
+            Util.ajax('http://localhost:8088/123',{},'get',function (result) {
+                console.log(result);
+            })
+        },
         methods: {
             submitForm(formName) {
+                console.log(1)
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         Util.dataToSessionStorageOperate.save('user',this.loginForm);
