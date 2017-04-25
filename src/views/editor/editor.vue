@@ -71,13 +71,10 @@
         },
         methods: {
             onEditorBlur(editor) {
-                console.log('editor blur!', editor)
             },
             onEditorFocus(editor) {
-                console.log('editor focus!', editor)
             },
             onEditorReady(editor) {
-                console.log('editor ready!', editor)
             },
             /***/
             submitArticle () {
@@ -107,10 +104,6 @@
                                 showClose: true,
                                 message: '提交成功~~~',
                                 type: 'success'
-                            });
-                            this.$notify.info({
-                                title: '消息',
-                                message: '文章列表已更新~~~'
                             });
                         } else {
                             this.$message({
