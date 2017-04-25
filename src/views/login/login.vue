@@ -50,19 +50,23 @@
                 }
             };
         },
-        created () {
-            console.log(111)
-            Util.ajax('http://localhost:8088/123',{},'get',function (result) {
-                console.log(result);
-            })
-        },
         methods: {
             submitForm(formName) {
-                console.log(1)
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        Util.dataToSessionStorageOperate.save('user',this.loginForm);
-                        this.$router.push("/?tab=all");
+                        Util.loginAjax.login(this.loginForm,(result) => {
+                            if (result.status){
+                                Util.dataToSessionStorageOperate.save('token',result.token);
+                                Util.dataToSessionStorageOperate.save('user',this.loginForm);
+                                this.$router.push("/?tab=all");
+                            } else {
+                                this.$message({
+                                    showClose: true,
+                                    message: result.msg + '，帐号或密码错误!',
+                                    type: 'error'
+                                });
+                            }
+                        });
                         return true;
                     } else {
                         return false;

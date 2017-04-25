@@ -45,12 +45,12 @@ let router = new Router({
  * */
 router.beforeEach( (to, from, next) => {
     var user = Util.dataToSessionStorageOperate.achieve('user');
-
-    if(!user && to.path != '/login')
+    var token = Util.dataToSessionStorageOperate.achieve('token');
+    if((!token || !user) && to.path != '/login')
         next('/login');
-    else if ( user && to.path == '/login'){
+    else if ( token && user && to.path == '/login'){
         next('/?tab=all');
-    }else if ( user && to.path == '/' && !to.query.tab) {
+    }else if ( token && user && to.path == '/' && !to.query.tab) {
         next('/?tab=all');
     }else {
         next();

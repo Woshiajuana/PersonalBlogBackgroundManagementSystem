@@ -32,7 +32,6 @@
                 this.user_name = Util.dataToSessionStorageOperate.achieve('user').user_name;
             },
             safeExit () {
-                console.log(1)
                 this.$confirm('是否删除安全退出?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',

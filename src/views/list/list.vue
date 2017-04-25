@@ -13,16 +13,11 @@
             </div>
             <div class="container-content">
                 <el-table
-                    :data="keyWordArticle_arr"
+                    :data="article_arr"
                     border
                     stripe
                     tooltip-effect="dark"
-                    style="width: 100%"
-                    @selection-change="handleSelectionChange">
-                    <el-table-column
-                        type="selection"
-                        width="55">
-                    </el-table-column>
+                    style="width: 100%">
                     <el-table-column
                         label="文章名"
                         show-overflow-tooltip>
@@ -31,35 +26,32 @@
                     <el-table-column
                         prop="article_type"
                         label="类别"
-                        width="120">
+                        width="150">
                     </el-table-column>
                     <el-table-column
                         prop="article_time"
                         label="发表时间"
-                        width="120"
+                        width="180"
                         show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column
                         label="操作"
                         width="180">
                         <template scope="scope">
-                            <el-button @click="handleClick" type="text" size="small">查看</el-button>
                             <el-button type="text" size="small">编辑</el-button>
                             <el-button type="text" size="small">下架</el-button>
-                            <el-button @click="deleteArticle(scope.row.article_title)" type="text" size="small">删除</el-button>
+                            <el-button @click="deleteArticle(scope.row)" type="text" size="small">删除</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
             </div>
             <div class="page-wrap">
                 <el-pagination
-                    @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
-                    :current-page="currentPage1"
-                    :page-sizes="[100, 200, 300, 400]"
-                    :page-size="100"
+                    :current-page="page_num"
+                    :page-size="page_size"
                     layout="total, prev, pager, next, jumper"
-                    :total="1000">
+                    :total="article_total">
                 </el-pagination>
             </div>
         </div>
@@ -72,11 +64,13 @@
         name: 'list',
         data() {
             return {
+                page_num:1,
+                page_count: 0,
+                page_size:12,
+                article_total: 0,
                 key_word: '',
                 is_loading: false,
-                currentPage1: 5,
-                article_arr: [],
-                multipleSelection: []
+                article_arr: []
             }
         },
         created () {
@@ -101,51 +95,57 @@
         },
         methods: {
             handleIconClick () {
-
-            },
-            handleSelectionChange (val) {
-                this.multipleSelection = val;
-            },
-            handleClick (val){
-                console.log(val)
-            },
-            handleSizeChange (val) {
-                console.log(`每页 ${val} 条`);
+                if(!this.key_word){
+                    this.$message({type: 'info', message: '请输入关键字'});
+                    return;
+                }
+                Util.jumpPage('?tab='+this.$route.query.tab+'&&key_word='+this.key_word);
             },
             handleCurrentChange (val) {
-                this.currentPage1 = val;
-                console.log(`当前页: ${val}`);
+                this.page_num = val;
+                this.fetchData();
             },
             /**删除文章数据*/
-            deleteArticle (article_title) {
+            deleteArticle ({_id,article_title}) {
                 this.$confirm('是否删除'+ article_title +'?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$message({
-                        type: 'success',
-                        message: '删除成功!'
+                    Util.listAjax.removeArticle({article_id:_id},(result) => {
+                        if(result.status){
+                            this.fetchData();
+                            this.$message({type: 'success', message: result.msg});
+                        }else{
+                            this.$message({type: 'success', message: result.msg});
+                        }
                     });
                 }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });
+                    this.$message({type: 'info', message: '已取消删除'});
                 });
             },
             /**获取文章列表数据*/
             fetchData (route) {
                 this.is_loading = true;
-                var tab = route ? route.query.tab : this.$route.query.tab;
+                var tab = route ? route.query.tab: this.$route.query.tab;
+                var key_word = route ? route.query.key_word: this.$route.query.key_word;
                 this.$store.commit(types.SET_TAB_INDEX,this.judgeTab(tab));
                 setTimeout( () => {
-                    Util.listAjax.achieveArticle({tab:tab},(result) => {
-                        if(result.status == 1)
-                            this.article_arr = result.result;
+                    Util.listAjax.achieveArticle({
+                        tab: tab,
+                        page_num: this.page_num,
+                        page_size: this.page_size,
+                        key_word: key_word
+                    }, (result) => {
+                        if(result.status == 1) {
+                            this.article_arr = result.data;
+                            this.page_count = result.page_count;
+                            this.article_total = result.article_total;
+                        }
+                        else this.$message({type: 'error', message: result.msg});
+                        this.is_loading = false;
                     });
-                    this.is_loading = false;
-                },1000);
+                },300);
             },
             /**判断列表tab键active的值index*/
             judgeTab (tab) {

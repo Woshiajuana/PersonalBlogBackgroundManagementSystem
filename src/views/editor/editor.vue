@@ -29,8 +29,8 @@
                 <div class="html ql-editor" v-html="content"></div>
             </div>
             <div class="input-btn">
-                <el-button type="primary" @click="submitArticle()">立即发表</el-button>
-                <el-button type="primary" @click="submitArticle()">立即上传</el-button>
+                <el-button type="primary" @click="submitArticle()">发布文章</el-button>
+                <el-button type="primary" @click="submitArticle()">保存草稿</el-button>
             </div>
         </div>
     </div>
@@ -38,6 +38,7 @@
 </template>
 <script>
     import types from '../../store/mutation-types';
+    import Util from '../../assets/lib/util';
     export default {
         data() {
             return {
@@ -45,20 +46,23 @@
                 article_title: '',
                 article_type: '',
                 options: [{
-                    value: '选项1',
+                    value: 'vue',
                     label: 'vue'
                 }, {
-                    value: '选项2',
+                    value: 'html',
                     label: 'html'
                 }, {
-                    value: '选项3',
+                    value: 'css',
                     label: 'css'
                 }, {
-                    value: '选项4',
+                    value: 'angular',
                     label: 'angular'
                 }, {
-                    value: '选项5',
+                    value: 'node',
                     label: 'node'
+                }, {
+                    value: 'js',
+                    label: 'js'
                 }],
                 name: 'base-example',
                 content: '',
@@ -86,21 +90,38 @@
                     return;
                 }
                 this.is_loading = true;
+                let article = {
+                    article_title: this.article_title,
+                    article_type: this.article_type,
+                    article_time: Util.dateFormat('yyyy-MM-dd hh-mm'),
+                    article_content: this.content
+                };
                 setTimeout(() => {
-                    this.is_loading = false;
-                    this.article_type = '';
-                    this.article_title = '';
-                    this.content = '';
-                    this.$message({
-                        showClose: true,
-                        message: '提交成功~~~',
-                        type: 'success'
+                    Util.listAjax.insertArticle({article:article},(result) => {
+                        if(result.status){
+                            this.is_loading = false;
+                            this.article_type = '';
+                            this.article_title = '';
+                            this.content = '';
+                            this.$message({
+                                showClose: true,
+                                message: '提交成功~~~',
+                                type: 'success'
+                            });
+                            this.$notify.info({
+                                title: '消息',
+                                message: '文章列表已更新~~~'
+                            });
+                        } else {
+                            this.$message({
+                                showClose: true,
+                                message: result.msg,
+                                type: 'error'
+                            });
+                        }
                     });
-                    this.$notify.info({
-                        title: '消息',
-                        message: '文章列表已更新~~~'
-                    });
-                },3000);
+                },300);
+
             }
         },
         computed: {
@@ -111,11 +132,7 @@
         created () {
             this.$store.commit(types.SET_TAB_INDEX,'2');
         },
-        mounted () {
-            setTimeout(() => {
-                this.content = '<h1></h1>'
-            }, 1800)
-        }
+        mounted () {}
     }
 </script>
 <style lang="scss">
@@ -124,7 +141,9 @@
         width: 150px !important;
     }
     .input-btn{
-        margin: 20px 0;
+        @extend %pf;
+        right: 20px;
+        top: 80px;
     }
     .prompt-icon{
         color: red;
